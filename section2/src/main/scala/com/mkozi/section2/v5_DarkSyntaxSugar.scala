@@ -77,7 +77,7 @@ object v5_DarkSyntaxSugar {
     
     // 3. the :: and the #:: methods are special
 
-    // normally, followint would be equivalent: 2.::(List(3,4))
+    // normally, following would be equivalent: 2.::(List(3,4))
     //    however, :: is different and equivalent to List(3,4).::(2)
     //  scala specification: last character determines associativity:
     //    if ends in colon (:) then right associative, otherwise left associative
