@@ -1,4 +1,4 @@
-package com.mkozi.section2
+package section2
 
 import scala.util.Try
 
