@@ -50,28 +50,28 @@ class EmptySet[A] extends MySet[A]:
 end EmptySet
 
 
-// class AllInclusiveSet[A] extends MySet[A]:
-//   def contains(el: A): Boolean = true
-//   def +(el: A): MySet[A] = this
-//   def ++(otherSet: MySet[A]): MySet[A] = this
+class AllInclusiveSet[A] extends MySet[A]:
+  def contains(el: A): Boolean = true
+  def +(el: A): MySet[A] = this
+  def ++(otherSet: MySet[A]): MySet[A] = this
 
-//   def map[B](f: A => B): MySet[B] = ???
-//   def flatMap[B](f: A => MySet[B]): MySet[B] = ???
+  def map[B](f: A => B): MySet[B] = ???
+  def flatMap[B](f: A => MySet[B]): MySet[B] = ???
 
-//   def filter(pred: A => Boolean): MySet[A] = ???  // property-based set
-//   def foreach(f: A => Unit): Unit = ???
+  def filter(pred: A => Boolean): MySet[A] = ???  // property-based set
+  def foreach(f: A => Unit): Unit = ???
 
-//   def -(el: A): MySet[A] = ???
-//   def --(otherSet: MySet[A]): MySet[A] = filter(!otherSet)
-//   def &(otherSet: MySet[A]): MySet[A] = filter(otherSet)
+  def -(el: A): MySet[A] = ???
+  def --(otherSet: MySet[A]): MySet[A] = filter(!otherSet)
+  def &(otherSet: MySet[A]): MySet[A] = filter(otherSet)
 
-//   def unary_! : MySet[A] = EmptySet()
-// end AllInclusiveSet
+  def unary_! : MySet[A] = EmptySet()
+end AllInclusiveSet
 
 
-class PropertyBasedSet[A](property: A => Boolean) extends MySet[A]:
+// class PropertyBasedSet[A](property: A => Boolean) extends MySet[A]:
 
-end PropertyBasedSet
+// end PropertyBasedSet
 
 
 class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A]:
