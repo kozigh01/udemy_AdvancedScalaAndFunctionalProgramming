@@ -16,12 +16,13 @@ object v7_AdvancedPatternMatching2 {
       val result1 = either match
         // case Or(number, str) => s"$number is written as $str"   // typical syntax
         case number Or str => s"$number is written as $str"   // infix syntax
-        case _ => "no match"
+        case null => "no match"
       println(s"either result1: $result1")
       
       // decomposing sequences
       val result2 = List(1,2,3,4) match
         case List(1, _*) => "starts with 1"   // using the vararg _*
+        case _ => "no match"
 
       // unapply sequence
       abstract class MyList[+A]:
