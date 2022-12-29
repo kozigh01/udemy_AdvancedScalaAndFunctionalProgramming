@@ -67,9 +67,9 @@ object v15_LazyEvaluation:
 
   end part1
 
-  def exercise1 =
-    
-  end exercise1
+  // def exercise1 =
+
+  // end exercise1
 
 end v15_LazyEvaluation
 
@@ -77,7 +77,7 @@ end v15_LazyEvaluation
 @main def v15_LazyEvaluationMain =
   println("---------- Section 3: Lazy Evaluation ----------")
   
-  // v15_LazyEvaluation.part1
-  v15_LazyEvaluation.exercise1
+  v15_LazyEvaluation.part1
+  // v15_LazyEvaluation.exercise1
   
   println("\n---------- Section 3: Lazy Evaluation ----------")  
