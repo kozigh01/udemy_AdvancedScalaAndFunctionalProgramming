@@ -16,7 +16,7 @@ abstract class MyStream[+A]:
   def tail: MyStream[A]
 
   def #::[B >: A](el: B): MyStream[B] // prepend operator
-  def ++[B >: A](otherStream: MyStream[B]): MyStream[B]  // concatenation operator
+  def ++[B >: A](otherStream: => MyStream[B]): MyStream[B]  // concatenation operator
 
   def foreach(f: A => Unit): Unit
   def map[B](f: A => B): MyStream[B]
@@ -44,7 +44,7 @@ object EmptyStream extends MyStream[Nothing]:   // extends Nothing, since A is c
   def tail: MyStream[Nothing] = throw new NoSuchElementException
 
   def #::[B >: Nothing](el: B): MyStream[B] = NonEmptyStream(el, this) // prepend operator
-  def ++[B >: Nothing](otherStream: MyStream[B]): MyStream[B] = otherStream  // concatenation operator
+  def ++[B >: Nothing](otherStream: => MyStream[B]): MyStream[B] = otherStream  // concatenation operator
 
   def foreach(f: Nothing => Unit): Unit = ()
   def map[B](f: Nothing => B): MyStream[B] = this
@@ -69,7 +69,7 @@ class NonEmptyStream[+A](h: A, t: => MyStream[A]) extends MyStream[A]:
   /*  ++ -- concatenation operator
     works similarly to #:: - lazy evaluation is preserved 
   */
-  def ++[B >: A](otherStream: MyStream[B]): MyStream[B] = NonEmptyStream(head, tail ++ otherStream)
+  def ++[B >: A](otherStream: => MyStream[B]): MyStream[B] = NonEmptyStream(head, tail ++ otherStream)
 
   def foreach(f: A => Unit): Unit = 
     f(head)
@@ -89,5 +89,29 @@ end NonEmptyStream
 
 
 object MyStreamTest extends App:
+  val naturals = MyStream.from(1)(_ + 1)
+  println(naturals.head)
+  println(naturals.tail.head)  // triggers evaluation of tail (from lazy tail value)
+  println(naturals.tail.tail.head)  // triggers evaluation of tail (from lazy tail value)
 
+  val startFrom0 = 0 #:: naturals   // naturals.#::(0)
+  println(startFrom0.head)
+
+  // startFrom0.take(10000).foreach(println)
+
+  // map, flatMap
+  println(startFrom0.map(_ * 2).take(20).toList())
+  println(startFrom0.flatMap(x => NonEmptyStream(x, NonEmptyStream(x + 1, EmptyStream))).take(10).toList())
+  println(startFrom0.filter(_ < 10).take(10).toList())
+
+  def fibonacci(first: BigInt, second: BigInt): MyStream[BigInt] =
+    NonEmptyStream(first, fibonacci(second, first + second))
+
+  println(fibonacci(1,1).take(100).toList())
+
+  def primes(numbers: MyStream[Int]): MyStream[Int] =
+    if numbers.isEmpty then numbers
+    else NonEmptyStream(numbers.head, primes(numbers.tail.filter(n => n % numbers.head != 0)))
+
+  println(primes(MyStream.from(2)(_ + 1).take(100)).toList())
 end MyStreamTest
