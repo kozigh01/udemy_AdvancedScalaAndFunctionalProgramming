@@ -78,6 +78,7 @@ object v25_ProducerConsumer_Level3 {
     end prodConsLargeBuffer
 
     prodConsLargeBuffer()
+  end part1_MySolution
 
   def part2_CourseSolution() =
     println("part2 - Course Solution")
@@ -147,4 +148,119 @@ object v25_ProducerConsumer_Level3 {
     end multiProducersConsumers
 
     multiProducersConsumers(3,3)
+  end part2_CourseSolution
+
 }
+
+object v26_ThreadCommunications:  
+  /*
+    1. think of an exaple where notifyAll acts in diferent way than notify
+        - when there are consumers that are only reading and not using "synchronized"
+    2. create a deadlock - all threads are blocking each other
+    3. create a livelock - yield execution, but nobody is making progress: threads are not blocked
+  */
+
+  def exercise1_NotifyAll(): Unit =
+    val bell = new Object
+
+    (1 to 10).foreach(i => 
+      Thread(() => {
+        bell.synchronized {
+          println(s"[thread $i] waiting...")
+          bell.wait()
+          println(s"[thread $i] bell is rung")
+        }
+      }
+      ).start()
+    )
+
+    Thread(() => {
+      Thread.sleep(2000)
+      println(s"[announcer] let's ring the bell")
+      bell.synchronized {
+        // bell.notifyAll()
+        bell.notify()
+      }
+    }).start()    
+  end exercise1_NotifyAll
+
+  def exercises2_Deadlock(): Unit =
+    val list1 = List(1,2,3)
+    println(s"exercise1 - start: list = $list1")
+    
+    val thread1 = Thread(() => {
+      println(s"  exercise 1, thread1 - start: head = ${list1.head}")
+      list1.synchronized {
+        list1.wait()
+      }
+      println(s"  exercise 1, thread1 - end")
+    })
+    
+    val thread2 = Thread(() => {
+      println(s"  exercise 1, thread2 - start: tail = ${list1.tail}")
+      list1.synchronized {
+        while (true) {
+          Thread.sleep(500)
+          list1.wait()
+        }
+      }
+      println(s"  exercise 1, thread2 - end")
+    })
+    
+    val thread3 = Thread(() => {
+      println(s"  exercise 1, thread3 - start: notify()")
+      list1.synchronized {
+        list1.notify()
+      }
+      println(s"  exercise 1, thread3 - end")
+    })
+
+    thread1.start()
+    thread2.start()
+    thread3.start()
+
+    thread1.join()
+    thread2.join()
+    
+    // Thread.sleep(2000)
+
+    println(s"exercise1 - end: list = $list1")    
+  end exercises2_Deadlock
+
+  def exercises2_Deadlock_CourseSolution() =
+    case class Friend(name: String):
+      def bow(other: Friend): Unit =
+        this.synchronized {
+          println(s"$this: I am bowing to my friend $other")
+          other.rise(this)
+          println(s"$this:; my friend $other has risen")
+        }
+      end bow
+
+      def rise(other: Friend): Unit =
+        this.synchronized {
+          println(s"$this: I am rising to my friend $other")
+        }
+      end rise
+    end Friend 
+
+    val sam = Friend("Sam")
+    val bob = Friend("Bob")
+
+    Thread(() => sam.bow(bob)).start()  // sam's lock, then bob's lock
+    Thread(() => bob.bow(sam)).start()  // bob's lock, then sam's lock
+
+    Thread.sleep(2000)
+  end exercises2_Deadlock_CourseSolution
+
+  def exercises3_Livelock_CourseSolution(): Unit =
+    case class Friend(name: String):
+      var side = "right"
+
+      def switchSide(): Unit = {
+        if side == "right" then "left"
+        else "right"
+      }
+    end Friend
+  end exercises3_Livelock_CourseSolution
+end v26_ThreadCommunications
