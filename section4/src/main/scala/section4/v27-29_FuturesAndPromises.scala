@@ -2,9 +2,10 @@ package section4
 
 import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
-import scala.util.Failure
-import scala.util.Success
-import scala.util.Random
+import scala.util.{Failure, Success, Random}
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.concurrent.Promise
 
 object v27_FuturesAndPromises:
   def part1(): Unit =
@@ -142,3 +143,75 @@ object v28_FuturesAndPromises2:
 
   end part1
 end v28_FuturesAndPromises2
+
+object v29_FuturesAndPromises3:
+  // online backing app
+  case class User(name: String)
+  case class Transaction(sender: String, reciever: String, amount: Double, status: String)
+
+  object BankingApp:
+    val name = "Rock the JVM banking"
+
+    def fetchUser(name: String): Future[User] =
+      Future {
+        Thread.sleep(500)   // simulate retrieving the user work
+        User(name)
+      }
+    def createTransaction(user: User, merchantName: String, amount: Double): Future[Transaction] =
+      Future {
+        // simulate some processes
+        Thread.sleep(1000)
+        Transaction(user.name, merchantName, amount, "SUCCESS")
+      }
+    def purchase(username: String, item: String, merchantName: String, cost: Double): String =
+      // fetch the user from the db
+      // create a transaction
+      // WAIT for the transaction to finish
+
+      val transactionStatusFuture =
+        for 
+          user <- fetchUser(username)
+          transaction <- createTransaction(user, merchantName, cost)
+        yield transaction.status
+
+      // will block until all futures are completed
+      Await.result(transactionStatusFuture, 2.seconds) // implicit conversion
+
+    end purchase  
+  end BankingApp
+
+  def part1() =
+    // block on a future
+    val purchase = BankingApp.purchase("Daniel", "Galaxy S22", "the store", 800)
+    println(purchase)
+  end part1
+
+  def part2() =
+    // promises
+    val promise1 = Promise[Int]()   // "controller" over a future
+    val future1 = promise1.future
+
+    // thread 1 - "consumer"
+    future1.onComplete {
+      case Success(value) => println(s"[consumer] I've received $value")
+      case Failure(exception) => println(s"[consumer] There was an error: $exception")
+    }
+
+    // thread 2 - "producer"
+    val producer = Thread(() => {
+      println("[producer] crunching numbers...")
+      Thread.sleep(1000)
+
+      // fullfilling the promise
+      promise1.success(42)
+      // promise1.failure(new RuntimeException("I fail"))
+      println("[producer] done")
+    }).start()
+
+    Thread.sleep(3000)
+  end part2
+end v29_FuturesAndPromises3
+
+object v30_FuturesAndPromisesExercises:
+  
+end v30_FuturesAndPromisesExercises

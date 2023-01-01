@@ -32,7 +32,9 @@ def displayPart(file: String, name: String)(f: () => Unit) =
       // displayPart("Producer-Consumer: Exercises (video 26)", "Exercise 3 Course Solution")(section4.v26_ThreadCommunications.exercises3_Livelock_CourseSolution)
     
       // displayPart("Futures and Promises: FP concurrency (video 27)", "Part 1")(section4.v27_FuturesAndPromises.part1)
-      displayPart("Futures and Promises: FP concurrency (video 28)", "Part 1")(section4.v28_FuturesAndPromises2.part1)
+      // displayPart("Futures and Promises: FP concurrency 2 (video 28)", "Part 1")(section4.v28_FuturesAndPromises2.part1)
+      // displayPart("Futures and Promises: FP concurrency 3 (video 29)", "Part 1")(section4.v29_FuturesAndPromises3.part1)
+      displayPart("Futures and Promises: FP concurrency 3 (video 29)", "Part 2")(section4.v29_FuturesAndPromises3.part2)
     
     
     }
