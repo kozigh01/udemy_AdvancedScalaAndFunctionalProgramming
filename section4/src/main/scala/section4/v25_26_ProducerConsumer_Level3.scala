@@ -258,9 +258,35 @@ object v26_ThreadCommunications:
       var side = "right"
 
       def switchSide(): Unit = {
-        if side == "right" then "left"
-        else "right"
+        if side == "right" then side = "left"
+        else side = "right"
       }
+
+      def pass(other: Friend): Unit =
+        while (this.side == other.side) {
+          println(s"$this: oh, but please, $other, feel free to pass...")
+          this.switchSide()
+          Thread.sleep(1000)
+        }
+      end pass
     end Friend
+
+    val bill = Friend("bill")
+    val joe = Friend("joe")
+
+    Thread(() => {
+      // println(s"${bill.name}: start")
+      bill.pass(joe)
+      // println(s"${bill.name}: end")
+    }).start()
+
+    Thread(() => {
+      // println(s"${joe.name}: start")
+      joe.pass(bill)
+      // println(s"${joe.name}: end")
+    }).start()
+
+    Thread.sleep(5000)
+  
   end exercises3_Livelock_CourseSolution
 end v26_ThreadCommunications
