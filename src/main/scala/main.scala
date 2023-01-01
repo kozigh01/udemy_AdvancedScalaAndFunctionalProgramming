@@ -20,8 +20,9 @@ def displayPart(file: String, name: String)(f: () => Unit) =
       // displayPart("Concurrency Problems (video 22)", "Excercises")(section4.v22_ConcurrencyProblems.exercises)
       
       // displayPart("JVM Thread Communications (video 23)", "Part1")(section4.v23_ThreadCommunication.part1)
-      
-      displayPart("Producer-Consumer: Level 2 (video 24)", "Part1")(section4.v24_ProducerConsumer_Level2.part1)
+      // displayPart("Producer-Consumer: Level 2 (video 24)", "Part1")(section4.v24_ProducerConsumer_Level2.part1)
+      // displayPart("Producer-Consumer: Level 3 (video 25)", "Part1 - My Solution")(section4.v25_ProducerConsumer_Level3.part1_MySolution)
+      displayPart("Producer-Consumer: Level 3 (video 25)", "Part2 - Course Solution")(section4.v25_ProducerConsumer_Level3.part2_CourseSolution)
     }
   }
 }
