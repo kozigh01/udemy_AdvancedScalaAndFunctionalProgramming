@@ -43,7 +43,9 @@ def displayPart(file: String, name: String)(f: () => Unit) =
   displaySection("Section 5") {
     () => {
       // displayPart("Implicits Intro (video 31-32)", "Part1")(section5.v32_ImplicitsIntro.part1)
-      displayPart("Organizing Implicits (video 33)", "Part1")(section5.v33_OrganizingImplicits.part1)
+      // displayPart("Organizing Implicits (video 33)", "Part1")(section5.v33_OrganizingImplicits.part1)
+      
+      displayPart("Type Classes (video 34)", "Part1")(section5.v34_TypeClasses.part1)
     }
   }
 }
