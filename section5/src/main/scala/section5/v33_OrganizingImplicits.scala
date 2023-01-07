@@ -4,7 +4,10 @@ object v33_OrganizingImplicits {
   def part1() =
 
     // implicit val reverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
+    //    Note: def MUST NOT HAVE PARANTHESES to be an accessor method
     implicit def reverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)  // alt using def: must NOT use parentheses
+    // implicit val reverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)  // alt using def: must NOT use parentheses
+    // implicit val normalOrdering: Ordering[Int] = Ordering.fromLessThan(_ < _)  // alt using def: must NOT use parentheses
     println(List(3,7,2,6,8,4).sorted)   // sorted has implicit Ordering parameter
 
     /*
@@ -71,13 +74,14 @@ object v33_OrganizingImplicits {
     */
     case class Purchase(nUnits: Int, unitPrice: Double):
       def totalPrice = nUnits * unitPrice
+      override def toString(): String = s"Purchase($nUnits, $unitPrice, ${totalPrice})"
 
     object Purchase:
       implicit val orderByTotalPrice: Ordering[Purchase] = Ordering.fromLessThan((a, b) => a.totalPrice < b.totalPrice)
 
     object PurchaseSortings:
-      implicit val orderByUnitCount: Ordering[Purchase] = Ordering.fromLessThan((a,b) => a.nUnits < b.nUnits)
       implicit val orderByUnitPrice: Ordering[Purchase] = Ordering.fromLessThan((a,b) => a.unitPrice < b.unitPrice)
+      implicit val orderByUnitCount: Ordering[Purchase] = Ordering.fromLessThan((a,b) => a.nUnits < b.nUnits)
 
     val purchases = List(
       Purchase(5, 1.5),
@@ -86,7 +90,9 @@ object v33_OrganizingImplicits {
       Purchase(7, 2.75)
     )
 
-    // import PurchaseSortings.orderByUnitCount
     // import PurchaseSortings.orderByUnitPrice
-    println(s"purchases.sorted: ${purchases.sorted}")
+    import PurchaseSortings.orderByUnitCount
+    // import PurchaseSortings.* // this causes an "ambiguous" compiler error
+    println(s"\npurchases.sorted: ${purchases.sorted}")
+    println(s"purchases.sorted - total price: ${purchases.sorted.map(p => p.totalPrice)}")
 }

@@ -20,6 +20,7 @@ object v32_ImplicitsIntro:
     // implicit parameters
     def increment(x: Int)(implicit amount: Int): Int = x + amount
     implicit val defaultAmount: Int = 11
+    // implicit val defaultAmount2: Int = 22 // this causes an compile issue, there are ambuiguous implicit values for Int
     println(s"increment(4): ${increment(4)}")   // implicitely uses defaultAmount
     println(s"increment(4)(3): ${increment(4)(3)}")   // implicitely uses defaultAmount
     
