@@ -68,18 +68,7 @@ object v34_TypeClasses {
     /* 
       exeercise:  Equality 
     */
-    trait Equal[T]:
-      def apply(val1: T, val2: T): Boolean
-    object Equal:
-      def apply[T](implicit instance: Equal[T]) = instance
-      def apply[T](a: T, b: T)(implicit instance: Equal[T]) = instance(a, b)
-
-    object UserEqualityName extends Equal[User]:
-      def apply(u1: User, u2: User): Boolean = u1.name == u2.name
-    object UserEqualityNameAndEmail extends Equal[User]:
-      def apply(u1: User, u2: User): Boolean = u1.name == u2.name && u1.email == u2.email
-
-    implicit val UserEqual: Equal[User] = UserEqualityName
+    import Equality.*
 
     val jim2 = User("Jim", 54, "a@a.com")
     println(s"Equal name for jim and jim2: ${UserEqualityName(jim, jim2)}")

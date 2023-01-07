@@ -12,6 +12,7 @@ def displayPart(file: String, name: String)(f: () => Unit) =
 
 
 @main def Main = {
+  
   // displaySection("Section 4") {    
   //   () => {
   //     // displayPart("Intro to Parellel Programming (video 21)", "Part 1")(section4.v21_IntoParallelProgramming.part1)
