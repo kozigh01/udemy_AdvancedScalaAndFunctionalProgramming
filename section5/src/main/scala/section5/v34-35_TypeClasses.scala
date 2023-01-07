@@ -2,6 +2,8 @@ package section5
 
 import java.util.Calendar
 import javax.swing.text.html.HTML
+import java.util.Date
+
 
 object v34_TypeClasses {
   def part1() =
@@ -32,6 +34,8 @@ object v34_TypeClasses {
 
     // option 3 - better
     trait HTMLSerializer[T]:
+      val someValue = "I am a value"
+
       def serialize(value: T): String
 
     object UserSerializer extends HTMLSerializer[User]:
@@ -54,6 +58,9 @@ object v34_TypeClasses {
     //  TYPE CLASS
     trait MyTypeClassTemplate[T]:
       def action(value: T): String
+    object MyTypeClassTemplate:
+      def apply[T](implicit instance: MyTypeClassTemplate[T]) = instance
+
     // TYPE CLASS INSTANCE
     object MyTypeClassTemplate1 extends MyTypeClassTemplate[Int]:
       def action(value: Int): String = s"the int is: $value"
@@ -63,16 +70,42 @@ object v34_TypeClasses {
     */
     trait Equal[T]:
       def apply(val1: T, val2: T): Boolean
+    object Equal:
+      def apply[T](implicit instance: Equal[T]) = instance
+      def apply[T](a: T, b: T)(implicit instance: Equal[T]) = instance(a, b)
+
     object UserEqualityName extends Equal[User]:
       def apply(u1: User, u2: User): Boolean = u1.name == u2.name
     object UserEqualityNameAndEmail extends Equal[User]:
       def apply(u1: User, u2: User): Boolean = u1.name == u2.name && u1.email == u2.email
 
-    val bob = User("Bob", 54, "a@a.com")
-    println(s"Equal name for jim and bob: ${UserEqualityName(jim, bob)}")
+    implicit val UserEqual: Equal[User] = UserEqualityName
+
+    val jim2 = User("Jim", 54, "a@a.com")
+    println(s"Equal name for jim and jim2: ${UserEqualityName(jim, jim2)}")
+    println(s"Equal name for jim and jim2 using companion object: ${Equal[User](jim, jim2)}")
+    println(s"Equal name and email for jim and jim2 using companion object: ${Equal(jim, jim2)(UserEqualityNameAndEmail)}")
 
 
     // HTMLSerializer - part 2
-    object HTMLSerializer:
+    object HTMLSerializer:    // companion object
+      def apply[T](implicit serializer: HTMLSerializer[T]) = serializer
+  
       def serialize[T](value: T)(implicit serializer: HTMLSerializer[T]): String =   
+        serializer.serialize(value)
+
+
+    object IntSerializer extends HTMLSerializer[Int]:
+      def serialize(value: Int): String = s"<div>Int serialize - ...$value...</div>"
+
+    println(s"implicit serialize john: ${HTMLSerializer.serialize(42)(IntSerializer)}")
+
+    implicit val userHTMLSerializer: HTMLSerializer[User] = (user: User) => s"implicit - ...$user..."
+    implicit val dateHTMLSerializer: HTMLSerializer[Date] = (date: Date) => s"implicit - ...$date..."
+
+    println(s"implicit serialize john: ${HTMLSerializer.serialize(jim)}")
+    println(s"implicit serialize java.util.Date: ${HTMLSerializer.serialize(Calendar.getInstance().getTime())}")
+    
+    // alternate that give access to full type class functionality
+    println(s"implicit serialize john: ${HTMLSerializer[User].serialize(jim)} ${HTMLSerializer[User].someValue}")
 }
