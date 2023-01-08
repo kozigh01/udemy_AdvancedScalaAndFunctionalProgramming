@@ -4,8 +4,6 @@ import java.util.Date
 
 object v38_JsonSerialization {
   def part1() =
-    println("hello")
-
     /*
       Users, posts, feeds, etc
       Want to seraialize to Json
@@ -30,7 +28,7 @@ object v38_JsonSerialization {
     final case class JsonNumber(value: Int) extends JsonValue:
       def stringify: String = value.toString()
     final case class JsonDate(value: Date) extends JsonValue:
-      def stringify: String = value.toGMTString()
+      def stringify: String = s"\"${value.toGMTString()}\""
     final case class JsonArray(value: List[JsonValue]) extends JsonValue:
       def stringify: String = value.map(_.stringify).mkString("[", ",", "]")
     final case class JsonObject(values: Map[String, JsonValue]) extends JsonValue:
@@ -75,6 +73,12 @@ object v38_JsonSerialization {
         val converter = implicitly[JsonConverter[T]]
         converter.convert(value)
 
+    // 2.3 conversion (enrichments)
+    //    moved this before 2.2, so it can be used in custom type type class instances
+    implicit class JsonOps[T](value: T):
+      def toJson(implicit converter: JsonConverter[T]): JsonValue =
+        converter.convert(value)
+
     // 2.2 for existing data types
     implicit object StringConverter extends JsonConverter[String]:  // 2.2
       def convert(value: String): JsonValue = JsonString(value)
@@ -98,11 +102,18 @@ object v38_JsonSerialization {
 
     implicit object FeedConverter extends JsonConverter[Feed]:
       def convert(feed: Feed): JsonValue = JsonObject(Map(
-        "user" -> UserConverter.convert(feed.user),   // TODO refactor
-        "posts" -> JsonArray(feed.posts.map(JsonConverter(_)) // a better way
+        "user" -> feed.user.toJson,   // uses the implicit "extension" method from JsonOps
+        "posts" -> JsonArray(feed.posts.map(_.toJson)   // uses the implicit "extension" method from JsonOps
       )))
 
-    
 
-    // call stringify on result
+    // try things out
+    val now = new Date(System.currentTimeMillis())
+    val john = User("John", 34, "j@rthvm.com")
+    val feed = Feed(john, List(
+      Post("post 1", now),
+      Post("post 2", now)
+    ))
+
+    println(s"stringify feed: ${feed.toJson.stringify}")
 }
