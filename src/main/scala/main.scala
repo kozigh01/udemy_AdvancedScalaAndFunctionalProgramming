@@ -48,7 +48,8 @@ def displayPart(file: String, name: String)(f: () => Unit) =
       // displayPart("Organizing Implicits (video 33)", "Part1")(section5.v33_OrganizingImplicits.part1)
       // displayPart("Type Classes (video 34, 35, 37)", "Part1")(section5.v34_TypeClasses.part1)
       // displayPart("Type Classes (video 36)", "Part2")((section5.v36_TypeClasses.part1))
-      displayPart("Json Serialization (video 37)", "Part1")((section5.v38_JsonSerialization.part1))
+      // displayPart("Json Serialization (video 38)", "Part1")((section5.v38_JsonSerialization.part1))
+      displayPart("The Magnet Pattern (video 39)", "Part1")((section5.v39_MagnetPattern.part1))
     }
   }
 }
