@@ -50,7 +50,8 @@ def displayPart(file: String, name: String)(f: () => Unit) =
       // displayPart("Type Classes (video 36)", "Part2")((section5.v36_TypeClasses.part1))
       // displayPart("Json Serialization (video 38)", "Part1")((section5.v38_JsonSerialization.part1))
       // displayPart("The Magnet Pattern (video 39)", "Part1")((section5.v39_MagnetPattern.part1))
-      displayPart("Given Instances and Using Clauses (video 40)", "Part1")((section5.v40_GivenInstancesAndUsingClauses.part1))
+      // displayPart("Given Instances and Using Clauses (video 40)", "Part1")((section5.v40_GivenInstancesAndUsingClauses.part1))
+      displayPart("Extension Methods (video 41)", "Part1")((section5.v41_ExtensionMethods.part1))
     }
   }
 }
