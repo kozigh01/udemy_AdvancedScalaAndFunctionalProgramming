@@ -6,7 +6,7 @@ object v38_JsonSerialization {
   def part1() =
     /*
       Users, posts, feeds, etc
-      Want to seraialize to Json
+      Want to serialize to Json
     */
 
     case class User(name: String, age: Int, email: String)
@@ -14,7 +14,7 @@ object v38_JsonSerialization {
     case class Feed(user: User, posts: List[Post])
 
     /*
-      want a facility to seriaize these objects
+      want a facility to serialize these objects
       1. intermediate data types: Int, String, List, Date ...
       2. type classes for conversion to intermediate data types
       3. serialize to Json
@@ -73,9 +73,9 @@ object v38_JsonSerialization {
         val converter = implicitly[JsonConverter[T]]
         converter.convert(value)
 
-    // 2.3 conversion (enrichments)
+    // 2.3 conversion (enrichment's)
     //    moved this before 2.2, so it can be used in custom type type class instances
-    implicit class JsonOps[T](value: T):
+    implicit class JsonOps[T : JsonConverter](value: T):
       def toJson(implicit converter: JsonConverter[T]): JsonValue =
         converter.convert(value)
 
