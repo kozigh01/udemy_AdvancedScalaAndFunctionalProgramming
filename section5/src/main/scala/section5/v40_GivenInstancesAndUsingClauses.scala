@@ -5,30 +5,35 @@ object v40_GivenInstancesAndUsingClauses {
     println("part 1")
 
     // old implicit way
-//    object Implicits:
-//      implicit val descendingOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
+    object Implicits:
+      implicit val descendingOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
 
     // new Scala 3 style
     //    given <=> implicit val (scala 2)
     // implicit val
-    object GivenVals:
+    object GivenValues:
+      // given value
       given descendingOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
-
+    object GivenAnonymous:
       // instantiating an anonymous class - Naive
       given descendingOrdering2: Ordering[Int] = new Ordering[Int] {
         override def compare(x: Int, y: Int) = y - x
       }
-      // instantiating an anonymous class using with - better
+    object GivenWith:
+      // instantiating an anonymous class using "with" - better
       given descendingOrdering3: Ordering[Int] with {
         override def compare(x: Int, y: Int) = y - x
       }
 
-    import GivenVals.{descendingOrdering3}
+//    import GivenWith.{descendingOrdering3}
+//    import GivenWith.given
+    import GivenWith.*  // doesn't import givens: need to use import GivenWith.given
+
+    //    import Implicits.{descendingOrdering}
 
     println(List(4,6,2,3,7,1).sorted)
 
     val list1 = List(3,4,2,1)
-    // import Implicits.{descendingOrdering}
     println(list1.sorted)
 
 
@@ -48,6 +53,41 @@ object v40_GivenInstancesAndUsingClauses {
     // implicit defs (synthesize new implicit values)
     trait Combinator[A]:  // in mathematical terms, this is a semigroup
       def combine(x: A, y: A): A
+
+    // compare lists of ints based on sum of elements: List(1,2,3) < List(4,5,6) (6 < 15)
+
+    // scala 2 method
+    implicit def ListOrdering[A](implicit simpleOrdering: Ordering[A], combinator: Combinator[A]): Ordering[List[A]] =
+      new Ordering[List[A]]:
+        override def compare(x: List[A], y: List[A]): Int =
+          val sumX = x.reduce(combinator.combine)
+          val sumY = x.reduce(combinator.combine)
+          simpleOrdering.compare(sumX, sumY)
+    //  scala 3 method
+    given listOrdering2[A](using simpleOrdering: Ordering[A], combinator: Combinator[A]): Ordering[List[A]] with {
+      override def compare(x: List[A], y: List[A]): Int =
+        val sumX = x.reduce(combinator.combine)
+        val sumY = x.reduce(combinator.combine)
+        simpleOrdering.compare(sumX, sumY)
+    }
+
+
+    // implicit conversions (abused in scala 2)
+    case class Person(name: String) {
+      def greet(): String = s"Hi, my name is $name"
+    }
+
+    // scala 2 implicit conversion
+//    implicit def string2Person(name: String): Person = Person(name)
+//    val danielGreet = "Daniel".greet()   // compiler: string2Person("Daniel").greet()
+//    println(danielGreet)
+
+    // scala 3 conversion
+    import scala.language.implicitConversions   // required for scala 3
+    given string2PersonConversion: Conversion[String, Person] with {
+      override def apply(name: String): Person = Person(name)
+    }
+    println("Mark".greet())
 
 
   def main(args: Array[String]): Unit = {
