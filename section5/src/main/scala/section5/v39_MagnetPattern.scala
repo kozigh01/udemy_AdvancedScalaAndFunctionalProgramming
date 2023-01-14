@@ -1,5 +1,6 @@
 package section5
 
+
 object v39_MagnetPattern {
   /*
     Magnet Pattern: 
@@ -14,12 +15,15 @@ object v39_MagnetPattern {
   trait Actor:
     def receive(statusCode: Int): Int
     def receive(request: P2PRequest): Int
-    def receive(respnse: P2PResponse): Int
+    def receive(response: P2PResponse): Int
     def receive[T : Serializer](message: T): Int  // uses context bound T to eliminate implicit parameter
     def receive[T : Serializer](message: T, statusCode: Int): Int  // uses context bound T to eliminate implicit parameter
   
-  def part1() =
+  def part1(): Unit =
     println("hello")
 
+  
+  @main def main()=
+    part1()
 
 }
