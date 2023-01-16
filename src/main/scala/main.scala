@@ -59,7 +59,9 @@ def displayPart(file: String, name: String)(f: () => Unit) =
     () => {
       // displayPart("Advanced Inheritance (video 43)", "Part 1")(section6.v43_AdvancedInheritancev43_AdvancedInheritance.part1)
       // displayPart("Variance (video 44)", "Part 1")(section6.v44_Variance.part1)
-      displayPart("Variance Exercises (video 45)", "Part 1")(section6.v45_Varaince_Exercises.exercises)
+      // displayPart("Variance Exercises (video 45)", "Part 1")(section6.v45_Varaince_Exercises.exercises)
+      // displayPart("Type Members (video 46)", "Part 1")(section6.v46_TypeMembers.part1)
+      displayPart("Path-Dependent Types (video 47)", "Part 1")(section6.v47_PathDependentType.part1)
     }
   }
 }
