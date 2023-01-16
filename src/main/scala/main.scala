@@ -57,8 +57,9 @@ def displayPart(file: String, name: String)(f: () => Unit) =
 
   displaySection("Section 6") {
     () => {
-      // displayPart("Advanced Inheritance (video 43", "Part 1")(section6.v43_AdvancedInheritancev43_AdvancedInheritance.part1)
-      displayPart("Variance (video 44", "Part 1")(section6.v44_Variance.part1)
+      // displayPart("Advanced Inheritance (video 43)", "Part 1")(section6.v43_AdvancedInheritancev43_AdvancedInheritance.part1)
+      // displayPart("Variance (video 44)", "Part 1")(section6.v44_Variance.part1)
+      displayPart("Variance Exercises (video 45)", "Part 1")(section6.v45_Varaince_Exercises.exercises)
     }
   }
 }

@@ -20,6 +20,11 @@ object v44_Variance:
         no  - invariance -> this throws an compile time exception:  val cage: Cage[Animal] = Cage[Cat]
                             this also throws exception:             val cage: Cage[Cat] = Cage[Animal]
         no!!! - contravariance Cage[Animal] inherits from Cage[Cat], so this is okay: val cage: Cage[Cat] = Cage[Animal]
+   
+    
+      General rule of thumb:
+      - Use covariance when you have a COLLECTION OF THINGS
+      - Use contravariance when you have a COLLECTION OF ACTIONS 
     */
 
     /*
@@ -176,7 +181,7 @@ object v44_Variance:
 
 
     
-  @main def main(): Unit =
+  def main(): Unit =
     part1()
 
 end v44_Variance
