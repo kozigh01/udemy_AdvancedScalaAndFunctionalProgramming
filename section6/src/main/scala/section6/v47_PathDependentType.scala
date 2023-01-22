@@ -55,8 +55,8 @@ object v47_PathDependentType extends App:
 
     trait IntItem extends Item[Int]
     trait StringItem extends Item[String]
-
     // def get[T <: ItemLike](key: T#Key): T = ???
+
 
     // get[IntItem](42) // okay
     // get[StringItem]("scalarocks") // okay
