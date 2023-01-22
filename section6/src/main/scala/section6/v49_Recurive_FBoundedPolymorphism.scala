@@ -94,8 +94,8 @@ object v49_Recurive_FBounded {
       //   def breed(dog: Dog5): List[Dog5] = List()
       // }
     
-      extension [A](a: Animal5[A])
-        def breed(): List[A]
+      // extension [A](a: Animal5[A])
+      //   def breed(): List[A]
     end Dog5
     
     import Dog5.*
@@ -106,7 +106,7 @@ object v49_Recurive_FBounded {
     //   }
 
     val dog5: Animal5[Dog5] = Dog5()
-    println(s"dog5.breed(): ${dog5.breed()}") 
+    // println(s"dog5.breed(): ${dog5.breed()}") 
       
 
 
